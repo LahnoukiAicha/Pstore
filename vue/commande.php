@@ -87,6 +87,22 @@ ul.mtable li, ol.mtable li{
 ul.mtable li:nth-child(even),ol.mtable li:nth-child(even){
   background: #f2f2f2;
 }
+
+.filter-container {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Adjust the gap between inputs as needed */
+        margin-bottom: 20px;
+    }
+
+    .filter-container label {
+        flex: 1;
+    }
+
+    .filter-container input,
+    .filter-container select {
+        flex: 10;
+    }
     </style>
 </head>
       <div class="home-content">
@@ -140,7 +156,32 @@ ul.mtable li:nth-child(even),ol.mtable li:nth-child(even){
                 }?>
                 </form>
             </div>
-            <div class="box">
+            <div class="box"  style="display: block;">
+              <!--search table--->
+              <div class="filter-container">
+                <label for="filterName">Article: </label>
+                <input type="text" id="filterName" placeholder="entrer le nom">
+
+                <label for="filterCategory">Fournisseur: </label>
+                <select id="filterCategory">
+                     <option value="">Tous </option>
+                     <?php
+                         $categories = getFournisseur();
+                         if (!empty($categories) && is_array($categories)) {
+                         foreach ($categories as $key => $value) {
+                         echo "<option value=\"{$value['nom']}\">{$value['nom']}</option>";
+                            }
+                         }
+                        ?>
+                </select>
+
+
+                <label for="filterQuantity">Quantité: </label>
+                <input type="number" id="filterQuantity">
+                
+                <label for="filterDate">Date: </label>
+                <input type="text" id="filterDate">
+            </div>
               <table class="mtable">
                 <tr>
                   <th>Article</th>
@@ -162,7 +203,7 @@ ul.mtable li:nth-child(even),ol.mtable li:nth-child(even){
                     <td><?= $value['nom']." ".$value['prenom']?></td>
                     <td><?= $value['quantite']?></td>
                     <td><?= $value['prix']?></td>
-                    <td><?= date('d/m/y  H:i:s',strtotime($value['dateCmde']))?></td>
+                    <td><?= date('d/m/y',strtotime($value['dateCmde']))?></td>
                     <td>
                       <a href="reçuCommande.php?id=<?= $value['id']?>"><i class='bx bx-receipt'></i></a>
                       <a href="../model/annulerCommande.php?id=<?= $value['id'] ?>" style="color:red;"><i class='bx bx-trash'></i></a>
@@ -175,6 +216,47 @@ ul.mtable li:nth-child(even),ol.mtable li:nth-child(even){
               }
               ?>
               </table>
+                            <!----search function-->
+                            <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterName = document.getElementById("filterName");
+        const filterCategory = document.getElementById("filterCategory");
+        const filterDate = document.getElementById("filterDate");
+        const filterQuantity = document.getElementById("filterQuantity");
+        const tableRows = document.querySelectorAll(".mtable tbody tr");
+
+        // Add event listeners to the filter inputs
+        filterName.addEventListener("input", filterTable);
+        filterCategory.addEventListener("change", filterTable);
+        filterDate.addEventListener("input", filterTable);
+        filterQuantity.addEventListener("input", filterTable);
+
+        function filterTable() {
+            const nameFilter = filterName.value.toLowerCase();
+            const categoryFilter = filterCategory.value.toLowerCase();
+            const dateFilter = filterDate.value;
+            const quantityFilter = filterQuantity.value;
+
+            tableRows.forEach(row => {
+                const rowName = row.cells[0].textContent.toLowerCase();
+                const rowCategory = row.cells[1].textContent.toLowerCase();
+                const rowDate = row.cells[4].textContent;
+                const rowQuantity = row.cells[2].textContent;
+
+                const nameMatch = rowName.includes(nameFilter);
+                const categoryMatch = categoryFilter === "" || rowCategory.includes(categoryFilter);
+                const dateMatch = rowDate.includes(dateFilter);
+                const quantityMatch = rowQuantity.includes(quantityFilter);
+
+                if (nameMatch && categoryMatch && dateMatch && quantityMatch) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    });
+</script>
             </div>
         </div>
       </div>

@@ -202,7 +202,7 @@ button{
              
               
                   <tr>
-                    <td><?= $vente['categorie']." - ".$vente['nomArticle']?></td>
+                    <td><?= $vente['nomArticle']?></td>
                     <td><?= $vente['quantite']?></td>
                     <td><?= $vente['prixUnitaire']?></td>
                     <td><?= $vente['prix']?></td>

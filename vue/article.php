@@ -219,8 +219,8 @@ ul.mtable li:nth-child(even),ol.mtable li:nth-child(even){
                     <td><?= $value['libelle']?></td>
                     <td><?= $value['quantite']?></td>
                     <td><?= $value['prixUnitaire']?></td>
-                    <td><?= date('d/m/y  H:i:s',strtotime($value['dateFab']))?></td>
-                    <td><?= date('d/m/y  H:i:s',strtotime($value['dateExp']))?></td>
+                    <td><?= date('d/m/y ',strtotime($value['dateFab']))?></td>
+                    <td><?= date('d/m/y ',strtotime($value['dateExp']))?></td>
                     <td><img src="<?= $value['images'] ?>" alt="" width="70" ></td>
                     <td>
                       <a href="?id=<?= $value['id']?>"><i class='bx bx-edit-alt'></i></a>
